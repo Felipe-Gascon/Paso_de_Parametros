@@ -26,6 +26,7 @@ public class Activity2 extends MainActivity {
         String datoRecibido;
         if(bundleRecibido!=null)
         {
+
             datoRecibido=bundleRecibido.getString("nombre");
             nom=(TextView) findViewById(R.id.tv_nombre);
             nom.setText("Hola "+datoRecibido+" introduzca los siguientes datos"  );
@@ -39,15 +40,18 @@ public class Activity2 extends MainActivity {
 
                 Intent i = new Intent();
                 Bundle b = new Bundle();
-                String edad = et_edades.getText().toString();
+                //String edad = et_edades.getText().toString();
                 int edade = Integer.parseInt(String.valueOf(et_edades.getText()));
-                b.putInt("edad",edade);
+                b.putInt("edad", edade);
                 //b.putString("edad",edad);
                 i.putExtras(b);
+
                 setResult(RESULT_OK,i);
                 finish();
             }
         });
 
     }
+
+
 }

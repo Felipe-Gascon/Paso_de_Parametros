@@ -14,19 +14,24 @@ public class MainActivity extends AppCompatActivity {
     RadioButton rb_mascu,rb_feme;
     EditText et_nom;
     TextView tv_dato;
-
+    private int edades;
     final int SUBACTIVITY_2 = 1;
+    static boolean ventana;
+
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+        ventana = true;
         et_nom=(EditText)this.findViewById(R.id.et_nom);
         btn_dato= (Button)this.findViewById(R.id.btn_envDat);
         rb_mascu=(RadioButton)this.findViewById(R.id.rb_masc);
         rb_feme=(RadioButton)this.findViewById(R.id.rb_fem);
         tv_dato=(TextView)this.findViewById(R.id.tv_datos);
+
         btn_dato.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
                 String nomAPasar =et_nom.getText().toString();
                 b.putString("nombre",nomAPasar);
                 i.putExtras(b);
+
+
                 startActivityForResult(i,SUBACTIVITY_2);
 
             }
@@ -43,19 +50,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public void ocultaCosas() {
+        et_nom.setEnabled(false);
+        rb_feme.setEnabled(false);
+        rb_mascu.setEnabled(false);
+        btn_dato.setEnabled(false);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         if(requestCode==SUBACTIVITY_2){
-            et_nom.setEnabled(false);
-            rb_feme.setEnabled(false);
-            rb_mascu.setEnabled(false);
-            btn_dato.setEnabled(false);
+            ventana = false;
+            ocultaCosas();
 
             Bundle bun = data.getExtras();
-            int edades= bun.getInt("edad");
+            edades = bun.getInt("edad");
             if(edades >18 && edades < 25)
             {
                 tv_dato.setText("Como tienes "+edades+" ya eres mayor de edad");
@@ -80,4 +92,26 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString("edades", tv_dato.getText().toString());
+        savedInstanceState.putBoolean("ventana", ventana);
+
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        ventana = savedInstanceState.getBoolean("ventana");
+        if (ventana == false) {
+
+            ocultaCosas();
+
+
+        }
+        String edades = savedInstanceState.getString("edades");
+        tv_dato.setText(edades);
+    }
 }
+
